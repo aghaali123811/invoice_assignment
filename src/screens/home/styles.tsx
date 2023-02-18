@@ -41,29 +41,32 @@ export default StyleSheet.create({
     borderBottomColor: Colors.greyText,
     borderBottomWidth: 0.4
   },
+    name:{
+      alignSelf: 'center',
+      color: Colors.greyText,
+      fontSize: 14,
+      width: '25%'
+  },
   date: {
-    alignSelf: 'center',
-    color: Colors.greyText,
-    fontSize: 14,
-    width: '33%',
-    fontWeight:'bold'
+      alignSelf: 'center',
+      color: Colors.greyText,
+      fontSize: 14,
+      width: '15%'
   },
   description: {
-    alignSelf: 'center',
-    color: Colors.DeepPurpleText,
-    fontSize: 14,
-    width: '33%',
-    marginLeft: '0%',
-    textAlign: 'center',
-    fontWeight:'bold'
+      alignSelf: 'center',
+      color: Colors.DeepPurpleText,
+      fontSize: 14,
+      width: '40%',
+      marginLeft: '0%',
+      textAlign: 'center'
   },
   amount: {
-    alignSelf: 'center',
-    color: Colors.DeepPurpleText,
-    fontSize: 14,
-    width: '23%',
-    textAlign: 'right',
-    fontWeight:'bold'
+      alignSelf: 'center',
+      color: Colors.DeepPurpleText,
+      fontSize: 14,
+      width: '10%',
+      textAlign: 'right'
   },
   flexRow: { 
     width: '100%', 
@@ -80,7 +83,7 @@ export default StyleSheet.create({
     borderWidth:1,
     marginTop: 10,
     borderRadius:10,
-    width:'75%',
+    width:'100%',
     marginHorizontal:12,
     fontSize:16,
     paddingLeft:20

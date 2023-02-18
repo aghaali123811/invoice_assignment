@@ -27,4 +27,9 @@ export default StyleSheet.create({
     paddingLeft:20,
     height:45
   },
+  label:{
+    color:'black',
+    marginLeft:'3.5%',
+    marginTop:10
+  }
 });

@@ -1,22 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 // Local Imports
 import Colors from '../../common/colors/Colors';
 
 export interface NavigationProps {
     item?: any;
+    onPress?: any
 }
 
 export default function ShowList(props: NavigationProps) {
     const { item } = props;
     return (
         <>
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={props.onPress}>
+                <Text allowFontScaling={false} style={styles.name}>{item.name}</Text>
                 <Text allowFontScaling={false} style={styles.date}>{item.quantity}</Text>
                 <Text allowFontScaling={false} style={styles.description}>{item.description}</Text>
                 <Text allowFontScaling={false} style={styles.amount} numberOfLines={2} ellipsizeMode='tail'>{item.price} €</Text>
-            </View>
+            </TouchableOpacity>
         </>
     );
 }
@@ -31,17 +33,23 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors,
         borderBottomWidth: 0.4
     },
+    name:{
+        alignSelf: 'center',
+        color: Colors.greyText,
+        fontSize: 14,
+        width: '25%'
+    },
     date: {
         alignSelf: 'center',
         color: Colors.greyText,
         fontSize: 14,
-        width: '33%'
+        width: '10%'
     },
     description: {
         alignSelf: 'center',
         color: Colors.DeepPurpleText,
         fontSize: 14,
-        width: '33%',
+        width: '40%',
         marginLeft: '0%',
         textAlign: 'center'
     },
@@ -49,7 +57,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: Colors.DeepPurpleText,
         fontSize: 14,
-        width: '23%',
+        width: '10%',
         textAlign: 'right'
     }
 });

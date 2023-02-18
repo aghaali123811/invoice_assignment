@@ -18,18 +18,21 @@ function Home(props: NavigationProps) {
   const [search,setSearch]= useState('')
   const [data,setData]= useState([{
     id:1,
+    name:'Book1',
     description:'This is description',
     price:'2',
     quantity:'2'
   }, 
   {
     id:2,
+    name:'Book1',
     description:'hello',
     price:'3',
     quantity:'3'
   },
   {
     id:2,
+    name:'Book1',
     description:'This is description',
     price:'3',
     quantity:'3'
@@ -67,14 +70,12 @@ function Home(props: NavigationProps) {
             value={search}
             onChangeText={e => setSearch(e) || handleSearch()}
           />
-          <TouchableOpacity style={styles.btn} onPress={()=>handleSearch()}>
-            <Text style={styles.txt1}>Search</Text>
-          </TouchableOpacity>
         </View>
 
 
 
         <View style={styles.row}>
+            <Text allowFontScaling={false} style={styles.name}>Name</Text>
             <Text allowFontScaling={false} style={styles.date}>Quantity</Text>
             <Text allowFontScaling={false} style={styles.description}>Description</Text>
             <Text allowFontScaling={false} style={styles.amount} >Price</Text>
@@ -83,7 +84,7 @@ function Home(props: NavigationProps) {
         <FlatList
           data={filterData.length === 0 ? data : filterData}
           renderItem={({ item, index }) => (
-            <ShowList item={item} />
+            <ShowList item={item} onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item})}/>
           )}
           keyExtractor={(item, index) => index}
           showsVerticalScrollIndicator={false}
