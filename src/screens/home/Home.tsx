@@ -1,11 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList,TextInput } from 'react-native';
 
 // Local Imports
 import styles from './styles';
-import Colors from '../../common/colors/Colors';
 import Constants from '../../common/constants/Constants';
-import SimpleButton from '../../components/buttons/simpleButton/SimpleButton';
 import ShowList from '../../components/FlatlistComponents/ShowList';
 
 export interface NavigationProps {
@@ -66,7 +64,7 @@ function Home(props: NavigationProps) {
         <View style={styles.row}>
           <TextInput
             style={styles.input1}
-            placeholder={"Search"}
+            placeholder={Constants.search}
             value={search}
             onChangeText={e => setSearch(e) || handleSearch()}
           />
@@ -75,10 +73,10 @@ function Home(props: NavigationProps) {
 
 
         <View style={styles.row}>
-            <Text allowFontScaling={false} style={styles.name}>Name</Text>
-            <Text allowFontScaling={false} style={styles.date}>Quantity</Text>
-            <Text allowFontScaling={false} style={styles.description}>Description</Text>
-            <Text allowFontScaling={false} style={styles.amount} >Price</Text>
+            <Text allowFontScaling={false} style={styles.name}>{Constants.name}</Text>
+            <Text allowFontScaling={false} style={styles.date}>{Constants.quantity}</Text>
+            <Text allowFontScaling={false} style={styles.description}>{Constants.description}</Text>
+            <Text allowFontScaling={false} style={styles.amount} >{Constants.price}</Text>
         </View>
 
         <FlatList

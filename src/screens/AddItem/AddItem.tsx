@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput } from 'react-native';
 
 // Local Imports
 import styles from './styles';
-import Colors from '../../common/colors/Colors';
 import SimpleButton from '../../components/buttons/simpleButton/SimpleButton';
 import Constants from '../../common/constants/Constants';
 
@@ -26,50 +25,49 @@ function AddItem(props: NavigationProps) {
                 <View style={styles.flexRow}>
                     <Text allowFontScaling={false} style={styles.heading}>{edit ? 'Edit Screen' : 'Add Screen'}Add Screen</Text>
 
-                    <Text style={styles.label}>Name</Text>
+                    <Text style={styles.label}>{Constants.name}</Text>
                     <TextInput
                         style={styles.input1}
-                        placeholder={"Search"}
+                        placeholder={Constants.name}
                         value={name}
                         onChangeText={e => setName(e)}
                     />
 
-                    <Text style={styles.label}>Quantity</Text>
+                    <Text style={styles.label}>{Constants.quantity}</Text>
                     <TextInput
                         style={styles.input1}
-                        placeholder={"Search"}
+                        placeholder={Constants.quantity}
                         value={quantity}
                         onChangeText={e => setQuantity(e)}
                     />
 
-                    <Text style={styles.label}>Description</Text>
+                    <Text style={styles.label}>{Constants.description}</Text>
                     <TextInput
                         style={styles.input1}
-                        placeholder={"Search"}
+                        placeholder={Constants.description}
                         value={description}
                         onChangeText={e => setDescription()}
                     />
 
-                    <Text style={styles.label}>Price</Text>
+                    <Text style={styles.label}>{Constants.price}</Text>
                     <TextInput
                         style={styles.input1}
-                        placeholder={"Search"}
+                        placeholder={Constants.price}
                         value={price}
-                        onChangeText={e => setPrice('Hello')}
+                        onChangeText={e => setPrice(e)}
                     />
 
                 </View>
                 {edit &&
                     <SimpleButton
-                        title={'Delete'}
+                        title={Constants.delete}
                         onPress={() => console.log('k')}
                         style={{ position: 'absolute', bottom: 70 }}
-                        // style={{position:'relative',marginTop:40}}
                         titleStyle={{}}
                     />
                 }
                 <SimpleButton
-                    title={edit ? 'Save' : Constants.continue}
+                    title={edit ? Constants.save : Constants.continue}
                     onPress={() => console.log('k')}
                     style={{ position: 'absolute', bottom: 10 }}
                     titleStyle={{}}
