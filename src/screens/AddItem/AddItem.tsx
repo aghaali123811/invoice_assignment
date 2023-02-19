@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput } from 'react-native';
 
 // Local Imports
@@ -11,6 +11,7 @@ export interface NavigationProps {
     route: any;
     handleAddNew: () => void;
     handleDelete: () => void;
+    handleEdit: () => void;
 }
 
 function AddItem(props: NavigationProps) {
@@ -20,6 +21,15 @@ function AddItem(props: NavigationProps) {
     const [quantity, setQuantity] = useState('')
     const [description, setDescription] = useState('')
     const [price, setPrice] = useState('')
+
+    useEffect(()=>{
+        if(route.params?.edit){
+            setName(route.params?.item?.name)
+            setQuantity(route.params?.item?.quantity)
+            setDescription(route.params?.item?.description)
+            setPrice(route.params?.item?.price)
+        }
+    },[])
 
     return (
         <>
@@ -63,20 +73,26 @@ function AddItem(props: NavigationProps) {
                 {edit &&
                     <SimpleButton
                         title={Constants.delete}
-                        onPress={() =>props.navigation.goBack() || props.route.params.handleDelete()}
+                        onPress={() => props.navigation.goBack() || props.route.params.handleDelete()}
                         style={{ position: 'absolute', bottom: 70 }}
                         titleStyle={{}}
                     />
                 }
                 <SimpleButton
                     title={edit ? Constants.save : Constants.continue}
-                    onPress={() => edit ? console.log('k') : props.navigation.goBack() || props.route.params.handleAddNew({
-                        id:Math.random(12)*12,
-                        name:name,
-                        description:description,
-                        price:price,
-                        quantity:quantity
-                      })}
+                    onPress={() => edit ? props.navigation.goBack() || props.route.params.handleEdit({
+                        id:route.params?.item.id ,
+                        name: name,
+                        description: description,
+                        price: price,
+                        quantity: quantity
+                    }) : props.navigation.goBack() || props.route.params.handleAddNew({
+                        id: Math.random(12) * 12,
+                        name: name,
+                        description: description,
+                        price: price,
+                        quantity: quantity
+                    })}
                     style={{ position: 'absolute', bottom: 10 }}
                     titleStyle={{}}
                 />

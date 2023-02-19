@@ -40,8 +40,6 @@ function Home(props: NavigationProps) {
 
 
   const handleSearch = () => {
-    let temp : any[] = [];
-
     if(search.length > 0){
       let filteredData: any = data.filter(function (item) {
         return item.description.toLowerCase().includes(search.toLowerCase());
@@ -62,6 +60,14 @@ function Home(props: NavigationProps) {
   const handleDelete  = (id:any) => {
     const arr = data.filter((e)=> e.id != id)
     setData(arr)
+  }
+
+  const handleEdit = (item:any) =>{
+    let temp : any[] = [];
+    data.forEach((e)=>{
+      e.id === item.id ? temp.push(item) : temp.push(e)
+    })
+    setData(temp)
   }
   return (
     <>
@@ -96,7 +102,7 @@ function Home(props: NavigationProps) {
           renderItem={({ item, index }) => (
             <ShowList 
               item={item} 
-              onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item, handleDelete :()=>handleDelete(item.id)})}/>
+              onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item, handleEdit :(e:any) => handleEdit(e), handleDelete :()=>handleDelete(item.id)})}/>
           )}
           keyExtractor={(item, index) => item.id}
           showsVerticalScrollIndicator={false}
