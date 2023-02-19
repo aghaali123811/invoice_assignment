@@ -9,6 +9,7 @@ import Constants from '../../common/constants/Constants';
 export interface NavigationProps {
     navigation: any;
     route: any;
+    handleAddNew: () => void;
 }
 
 function AddItem(props: NavigationProps) {
@@ -46,7 +47,7 @@ function AddItem(props: NavigationProps) {
                         style={styles.input1}
                         placeholder={Constants.description}
                         value={description}
-                        onChangeText={e => setDescription()}
+                        onChangeText={e => setDescription(e)}
                     />
 
                     <Text style={styles.label}>{Constants.price}</Text>
@@ -68,7 +69,13 @@ function AddItem(props: NavigationProps) {
                 }
                 <SimpleButton
                     title={edit ? Constants.save : Constants.continue}
-                    onPress={() => console.log('k')}
+                    onPress={() => edit ? console.log('k') : props.navigation.goBack() || props.route.params.handleAddNew({
+                        id:Math.random(12)*12,
+                        name:name,
+                        description:description,
+                        price:price,
+                        quantity:quantity
+                      })}
                     style={{ position: 'absolute', bottom: 10 }}
                     titleStyle={{}}
                 />

@@ -39,11 +39,11 @@ function Home(props: NavigationProps) {
   const [filterData, setFilterData] = useState([]);
 
 
-  const handleSearch = e => {
+  const handleSearch = () => {
     let temp : any[] = [];
 
     if(search.length > 0){
-      let filteredData = data.filter(function (item) {
+      let filteredData: any = data.filter(function (item) {
         return item.description.toLowerCase().includes(search.toLowerCase());
       });
       setFilterData(filteredData);
@@ -51,12 +51,20 @@ function Home(props: NavigationProps) {
       setFilterData([]);
     }
   };
+
+  const handleAddNew = (e:any) =>{
+    setData((data) => [
+      ...data,
+      e,
+    ]);
+    console.log(data)
+  }
   return (
     <>
       <View style={styles.container}>
         <View style={styles.flexRow}>
           <Text allowFontScaling={false} style={styles.heading}>Invoice</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AddItemScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('AddItemScreen',{handleAddNew :(e:any) => handleAddNew(e)})}>
             <Text allowFontScaling={false} style={styles.add}>Add</Text>
           </TouchableOpacity>
         </View>
@@ -84,7 +92,7 @@ function Home(props: NavigationProps) {
           renderItem={({ item, index }) => (
             <ShowList item={item} onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item})}/>
           )}
-          keyExtractor={(item, index) => index}
+          keyExtractor={(item, index) => item.id}
           showsVerticalScrollIndicator={false}
         />
       </View>
