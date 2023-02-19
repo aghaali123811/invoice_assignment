@@ -10,6 +10,7 @@ export interface NavigationProps {
     navigation: any;
     route: any;
     handleAddNew: () => void;
+    handleDelete: () => void;
 }
 
 function AddItem(props: NavigationProps) {
@@ -62,7 +63,7 @@ function AddItem(props: NavigationProps) {
                 {edit &&
                     <SimpleButton
                         title={Constants.delete}
-                        onPress={() => console.log('k')}
+                        onPress={() =>props.navigation.goBack() || props.route.params.handleDelete()}
                         style={{ position: 'absolute', bottom: 70 }}
                         titleStyle={{}}
                     />

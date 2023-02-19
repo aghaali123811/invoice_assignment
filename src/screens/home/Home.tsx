@@ -29,7 +29,7 @@ function Home(props: NavigationProps) {
     quantity:'3'
   },
   {
-    id:2,
+    id:3,
     name:'Book1',
     description:'This is description',
     price:'3',
@@ -57,7 +57,11 @@ function Home(props: NavigationProps) {
       ...data,
       e,
     ]);
-    console.log(data)
+  }
+
+  const handleDelete  = (id:any) => {
+    const arr = data.filter((e)=> e.id != id)
+    setData(arr)
   }
   return (
     <>
@@ -90,7 +94,9 @@ function Home(props: NavigationProps) {
         <FlatList
           data={filterData.length === 0 ? data : filterData}
           renderItem={({ item, index }) => (
-            <ShowList item={item} onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item})}/>
+            <ShowList 
+              item={item} 
+              onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item, handleDelete :()=>handleDelete(item.id)})}/>
           )}
           keyExtractor={(item, index) => item.id}
           showsVerticalScrollIndicator={false}
