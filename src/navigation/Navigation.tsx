@@ -1,38 +1,25 @@
-import React from 'react';
-import {Dimensions} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Splash from '../screens/splashScreen/Splash';
-import Home from '../screens/home/Home';
-import AddItem from '../screens/AddItem/AddItem';
+// In App.js in a new project
 
-const MainStack = createNativeStackNavigator();
-export const screenDimensions = Dimensions.get('screen');
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Navigation = () => {
+//Local imports
+import Home from '../screens/Home/Home';
+import DetailPage from '../screens/DetailScreen/DetailPage';
+
+const Stack = createNativeStackNavigator();
+
+function Navigation() {
   return (
-    <>
-      <NavigationContainer>
-        <MainStack.Navigator headerMode="none">
-          <MainStack.Screen
-            name="SplashScreen"
-            component={Splash}
-            options={{headerShown: false}}
-          />
-           <MainStack.Screen
-            name="HomeScreen"
-            component={Home}
-            options={{headerShown: false}}
-          />
-          <MainStack.Screen
-            name="AddItemScreen"
-            component={AddItem}
-            options={{headerShown: false}}
-          />
-        </MainStack.Navigator>
-      </NavigationContainer>
-    </>
+    <NavigationContainer >
+      <Stack.Navigator >
+        <Stack.Screen name="Home" component={Home} options={{headerShown:false}} />
+        <Stack.Screen name="DetailPage" component={DetailPage} options={{headerShown:false}} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-};
+}
 
 export default Navigation;

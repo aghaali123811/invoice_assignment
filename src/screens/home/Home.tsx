@@ -1,115 +1,182 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList,TextInput } from 'react-native';
-
-// Local Imports
-import styles from './styles';
-import Constants from '../../common/constants/Constants';
-import ShowList from '../../components/FlatlistComponents/ShowList';
+import React, {useEffect, useState} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  ImageBackground,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import Colors from '../../common/colors/Colors';
+import ImagePath from '../../common/images/ImagePath';
+import CustomTab from '../../components/Tab/CustomTab';
+import styles from './Styles';
+import MovieLists from '../../components/Lists/MovieLists';
+import Constants from '../../common/contant/Constants';
+import MoviesListPlay from '../../components/Lists/MoviesListPlay';
+import Axios from 'axios';
 
 export interface NavigationProps {
   navigation: any;
-  route: any;
+  route?: any;
 }
 
-function Home(props: NavigationProps) {
-  const { navigation, route } = props;
-  const [search,setSearch]= useState('')
-  const [data,setData]= useState([{
-    id:1,
-    name:'Book1',
-    description:'This is description',
-    price:'2',
-    quantity:'2'
-  }, 
-  {
-    id:2,
-    name:'Book1',
-    description:'hello',
-    price:'3',
-    quantity:'3'
-  },
-  {
-    id:3,
-    name:'Book1',
-    description:'This is description',
-    price:'3',
-    quantity:'3'
-  },
-])
-  const [filterData, setFilterData] = useState([]);
+export default function Home(props:NavigationProps) {
+  const [tab, setTab] = useState<any>(Constants.latest);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [popularList, setPopularList] = useState<any[]>([]);
+  const [latestList, setLatestList] = useState<any>(null);
+  const [trendingList, setTrendingList] = useState<any>(null);
 
+  const {navigation} = props;
 
-  const handleSearch = () => {
-    if(search.length > 0){
-      let filteredData: any = data.filter(function (item) {
-        return item.description.toLowerCase().includes(search.toLowerCase());
+  useEffect(() => {
+    getLatestList();
+    getPopularList();
+    getTrailerList();
+  }, []);
+
+  const getPopularList = async () => {
+    setLoading(true);
+    try {
+      let response = await Axios({
+        url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
+        method: 'GET',
       });
-      setFilterData(filteredData);
-    }else{
-      setFilterData([]);
+      setPopularList(response?.data?.results);
+      setLoading(false);
+    } catch (error) {
+      console.log('Error getting Data ', {error});
+      setLoading(false);
     }
   };
 
-  const handleAddNew = (e:any) =>{
-    setData((data) => [
-      ...data,
-      e,
-    ]);
-  }
+  const getLatestList = async () => {
+    setLoading(true);
+    try {
+      let response = await Axios({
+        url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=release_date.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
+        method: 'GET',
+      });
+      setLatestList(response?.data?.results);
+      setLoading(false);
+    } catch (error) {
+      console.log('Error getting Data ', error);
+      setLoading(false);
+    }
+  };
 
-  const handleDelete  = (id:any) => {
-    const arr = data.filter((e)=> e.id != id)
-    setData(arr)
-  }
+  const getTrailerList = async () => {
+    setLoading(true);
+    try {
+      let response = await Axios({
+        url: `https://api.themoviedb.org/3/trending/all/day?api_key=02594f17504d1a82ec172f4a3de468ea`,
+        method: 'GET',
+      });
+      setTrendingList(response?.data?.results);
+      setLoading(false);
+    } catch (error) {
+      console.log('Error getting TrailerList ', error);
+      setLoading(false);
+    }
+  };
 
-  const handleEdit = (item:any) =>{
-    let temp : any[] = [];
-    data.forEach((e)=>{
-      e.id === item.id ? temp.push(item) : temp.push(e)
-    })
-    setData(temp)
-  }
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.flexRow}>
-          <Text allowFontScaling={false} style={styles.heading}>Invoice</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('AddItemScreen',{handleAddNew :(e:any) => handleAddNew(e)})}>
-            <Text allowFontScaling={false} style={styles.add}>Add</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={{width:'100%',padding:20,height:'100%'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+        <CustomTab selectedTab={tab} onPress={(e:any) => setTab(e)} />
+        {!loading ? (
+          <>
+            {tab === Constants.latest ? (
+              <>
+                <Text style={styles.txt}>{Constants.whatPopular}</Text>
+                <FlatList
+                  data={latestList}
+                  horizontal
+                  renderItem={({item, index}) => (
+                    <MovieLists
+                      item={item}
+                      onPress={() =>
+                        navigation.navigate('DetailPage', {
+                          id: item.id,
+                        })
+                      }
+                      onPressDot={() => console.log('Dot clicked')}
+                    />
+                  )}
+                  scrollEnabled={true}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                />
+                <ImageBackground
+                  source={ImagePath.bannerBackground}
+                  style={styles.background}>
+                  <Text style={[styles.txt, {color: Colors.white}]}>
+                    {Constants.latestTrailer}
+                  </Text>
+                  <FlatList
+                    data={trendingList}
+                    horizontal
+                    renderItem={({item, index}) => (
+                      <MoviesListPlay
+                        item={item}
+                        onPress={() => console.log('clicked')}
+                      />
+                    )}
+                    scrollEnabled={true}
+                    keyExtractor={(item, index) => item.productId}
+                    showsHorizontalScrollIndicator={false}
+                  />
+                </ImageBackground>
 
-        <View style={styles.row}>
-          <TextInput
-            style={styles.input1}
-            placeholder={Constants.search}
-            value={search}
-            onChangeText={e => setSearch(e) || handleSearch()}
-          />
-        </View>
-
-
-
-        <View style={styles.row}>
-            <Text allowFontScaling={false} style={styles.name}>{Constants.name}</Text>
-            <Text allowFontScaling={false} style={styles.date}>{Constants.quantity}</Text>
-            <Text allowFontScaling={false} style={styles.description}>{Constants.description}</Text>
-            <Text allowFontScaling={false} style={styles.amount} >{Constants.price}</Text>
-        </View>
-
-        <FlatList
-          data={filterData.length === 0 ? data : filterData}
-          renderItem={({ item, index }) => (
-            <ShowList 
-              item={item} 
-              onPress={()=> navigation.navigate('AddItemScreen',{edit:true,item:item, handleEdit :(e:any) => handleEdit(e), handleDelete :()=>handleDelete(item.id)})}/>
-          )}
-          keyExtractor={(item, index) => item.id}
-          showsVerticalScrollIndicator={false}
-        />
+                <Text style={styles.txt}>{Constants.trending}</Text>
+                <FlatList
+                  data={popularList}
+                  horizontal
+                  renderItem={({item, index}) => (
+                    <MovieLists
+                      item={item}
+                      onPress={() =>
+                        navigation.navigate('DetailPage', {
+                          id: item?.id,
+                        })
+                      }
+                      onPressDot={() => console.log('Dot clicked')}
+                    />
+                  )}
+                  scrollEnabled={true}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </>
+            ) : (
+              <View>
+                <Text style={styles.txt}>{Constants.whatPopular}</Text>
+                <FlatList
+                  data={popularList}
+                  horizontal
+                  renderItem={({item, index}) => (
+                    <MovieLists
+                      item={item}
+                      onPress={() =>
+                        navigation.navigate('DetailPage', {
+                          id: item.id,
+                        })
+                      }
+                      onPressDot={() => console.log('Dot clicked')}
+                    />
+                  )}
+                  scrollEnabled={true}
+                  keyExtractor={(item, index) => index.toString()}
+                  showsHorizontalScrollIndicator={false}
+                />
+              </View>
+            )}
+          </>
+        ) : (
+          <ActivityIndicator color={Colors.darkBlue} size={'small'} />
+        )}
+      </ScrollView>
       </View>
-    </>
-  ); 
+  )
 }
-
-export default Home;

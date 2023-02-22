@@ -1,11 +1,12 @@
 const Colors = {
-  white: '#FFFFFF',
+  white: '#fff',
   black: '#000',
-  black70: 'rgba(0, 0, 0, 0.7)',
-  lightBlack: '#141414',
   transparent: 'transparent',
-  greyText:'grey',
-  DeepPurpleText:'#3D4586'
+  navyBlue: '#022947',
+  green: '#21CF7A',
+  yellow: '#D0D331',
+  darkBlue: '#081C22',
+  grey: '#ACA4C2',
 };
 
 export default Colors;
