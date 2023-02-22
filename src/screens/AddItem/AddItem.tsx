@@ -34,8 +34,8 @@ function AddItem(props: NavigationProps) {
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.flexRow}>
-                    <Text allowFontScaling={false} style={styles.heading}>{edit ? 'Edit Screen' : 'Add Screen'}Add Screen</Text>
+                <View>
+                    <Text allowFontScaling={false} style={styles.heading}>{edit ? 'Edit Screen' : 'Add Screen'}</Text>
 
                     <Text style={styles.label}>{Constants.name}</Text>
                     <TextInput
@@ -51,6 +51,7 @@ function AddItem(props: NavigationProps) {
                         placeholder={Constants.quantity}
                         value={quantity}
                         onChangeText={e => setQuantity(e)}
+                        keyboardType={'number-pad'}
                     />
 
                     <Text style={styles.label}>{Constants.description}</Text>
@@ -67,6 +68,7 @@ function AddItem(props: NavigationProps) {
                         placeholder={Constants.price}
                         value={price}
                         onChangeText={e => setPrice(e)}
+                        keyboardType={'number-pad'}
                     />
 
                 </View>
