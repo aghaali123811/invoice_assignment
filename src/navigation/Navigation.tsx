@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //Local imports
-import Home from '../screens/Home/Home';
+import Home from '../screens/home/Home';
 import DetailPage from '../screens/DetailScreen/DetailPage';
 
 const Stack = createNativeStackNavigator();

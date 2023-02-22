@@ -10,7 +10,7 @@ import {
 import Colors from '../../common/colors/Colors';
 import ImagePath from '../../common/images/ImagePath';
 import CustomTab from '../../components/Tab/CustomTab';
-import styles from './Styles';
+import styles from './styles';
 import MovieLists from '../../components/Lists/MovieLists';
 import Constants from '../../common/contant/Constants';
 import MoviesListPlay from '../../components/Lists/MoviesListPlay';
