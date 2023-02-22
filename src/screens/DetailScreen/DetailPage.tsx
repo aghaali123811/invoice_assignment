@@ -45,7 +45,7 @@ export interface NavigationProps {
 
 export default function DetailPage(props:NavigationProps) {
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<any>([]);
   const {navigation} = props;
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import ImagePath from '../../common/images/ImagePath';
 
 
 export interface NavigationProps {
-  navigation: any;
+  navigation?: any;
   route?: any;
   item?: any;
   onPress?: any;
