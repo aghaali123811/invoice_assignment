@@ -3,7 +3,7 @@ import {View, TouchableOpacity, Text, StyleSheet, Image} from 'react-native';
 import Colors from '../../common/colors/Colors';
 // import ProgressCirzcle from 'react-native-progress-circle';
 import ImagePath from '../../common/images/ImagePath';
-
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 export interface NavigationProps {
   navigation?: any;
@@ -11,6 +11,8 @@ export interface NavigationProps {
   item?: any;
   onPress?: any;
   onPressDot?:any;
+  onPressFavourite?:any;
+  favourite?:boolean;
 }
 
 
@@ -30,6 +32,9 @@ function MovieLists(props:NavigationProps) {
         <View style={styles.dot} />
         <View style={styles.dot} />
       </TouchableOpacity>
+      {props.favourite && <TouchableOpacity style={{position:'absolute',paddingTop:6,left:10}} onPress={props.onPressFavourite}>
+      <AntDesign name={item.isFavourite ? 'heart' :'hearto'} size={20} color={Colors.white}  />
+      </TouchableOpacity> }
       <View style={styles.progressContainer}>
         {/* <ProgressCircle
           percent={item.progress}

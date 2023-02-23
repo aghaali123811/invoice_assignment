@@ -6,11 +6,12 @@ import {
   ImageBackground,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from 'react-native';
 import Colors from '../../common/colors/Colors';
 import ImagePath from '../../common/images/ImagePath';
 import CustomTab from '../../components/Tab/CustomTab';
-import styles from './styles';
+import styles from './Styles';
 import MovieLists from '../../components/Lists/MovieLists';
 import Constants from '../../common/contant/Constants';
 import MoviesListPlay from '../../components/Lists/MoviesListPlay';
@@ -27,6 +28,7 @@ export default function Home(props:NavigationProps) {
   const [popularList, setPopularList] = useState<any[]>([]);
   const [latestList, setLatestList] = useState<any>(null);
   const [trendingList, setTrendingList] = useState<any>(null);
+  const [favouriteItems, setFavouriteItems] = useState<any>(null);
 
   const {navigation} = props;
 
@@ -43,7 +45,11 @@ export default function Home(props:NavigationProps) {
         url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
         method: 'GET',
       });
-      setPopularList(response?.data?.results);
+      var temp: any[] = []
+      response?.data?.results.forEach((item:any) => {
+        temp.push({...item, isFavourite: false})
+      });
+      setPopularList(temp);
       setLoading(false);
     } catch (error) {
       console.log('Error getting Data ', {error});
@@ -58,7 +64,11 @@ export default function Home(props:NavigationProps) {
         url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=release_date.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
         method: 'GET',
       });
-      setLatestList(response?.data?.results);
+      var temp: any[] = []
+      response?.data?.results.forEach((item:any) => {
+        temp.push({...item, isFavourite: false})
+      });
+      setLatestList(temp);
       setLoading(false);
     } catch (error) {
       console.log('Error getting Data ', error);
@@ -81,10 +91,26 @@ export default function Home(props:NavigationProps) {
     }
   };
 
+  const handleFavourite = (item: any) => {
+    let filteredList: any[] = []
+    latestList.forEach((element:any) => {
+      if(element.id === item.id){
+        filteredList.push({...element, isFavourite: !element.isFavourite})
+      }
+      else{
+        filteredList.push(element)
+      }
+    });
+    setLatestList(filteredList)
+  }
+
   return (
       <View style={{width:'100%',padding:20,height:'100%'}}>
         <ScrollView showsVerticalScrollIndicator={false}>
         <CustomTab selectedTab={tab} onPress={(e:any) => setTab(e)} />
+        <TouchableOpacity onPress={()=>props.navigation.navigate('FavouritePage',{latestList})}>
+        <Text style={{color:Colors.black}}>Go to Favourites</Text>
+        </TouchableOpacity>
         {!loading ? (
           <>
             {tab === Constants.latest ? (
@@ -96,6 +122,8 @@ export default function Home(props:NavigationProps) {
                   renderItem={({item, index}) => (
                     <MovieLists
                       item={item}
+                      favourite={true}
+                      onPressFavourite={() => handleFavourite(item)}
                       onPress={() =>
                         navigation.navigate('DetailPage', {
                           id: item.id,
