@@ -22,7 +22,7 @@ export interface NavigationProps {
   route?: any;
 }
 
-export default function Home(props:NavigationProps) {
+export default function Home(props: NavigationProps) {
   const [tab, setTab] = useState<any>(Constants.latest);
   const [loading, setLoading] = useState<boolean>(false);
   const [popularList, setPopularList] = useState<any[]>([]);
@@ -45,9 +45,9 @@ export default function Home(props:NavigationProps) {
         url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
         method: 'GET',
       });
-      var temp: any[] = []
-      response?.data?.results.forEach((item:any) => {
-        temp.push({...item, isFavourite: false})
+      var temp: any[] = [];
+      response?.data?.results.forEach((item: any) => {
+        temp.push({...item, isFavourite: false});
       });
       setPopularList(temp);
       setLoading(false);
@@ -64,9 +64,9 @@ export default function Home(props:NavigationProps) {
         url: `https://api.themoviedb.org/3/discover/movie?api_key=02594f17504d1a82ec172f4a3de468ea&language=en-US&sort_by=release_date.desc&include_adult=false&include_video=false&page=1&with_watch_monetization_types=flatrate`,
         method: 'GET',
       });
-      var temp: any[] = []
-      response?.data?.results.forEach((item:any) => {
-        temp.push({...item, isFavourite: false})
+      var temp: any[] = [];
+      response?.data?.results.forEach((item: any) => {
+        temp.push({...item, isFavourite: false});
       });
       setLatestList(temp);
       setLoading(false);
@@ -91,25 +91,48 @@ export default function Home(props:NavigationProps) {
     }
   };
 
-  const handleFavourite = (item: any) => {
-    let filteredList: any[] = []
-    latestList.forEach((element:any) => {
-      if(element.id === item.id){
-        filteredList.push({...element, isFavourite: !element.isFavourite})
-      }
-      else{
-        filteredList.push(element)
-      }
-    });
-    setLatestList(filteredList)
-  }
+  const handleFavourite = (item: any, type: String) => {
+    let filteredList: any[] = [];
+
+    switch (type) {
+      case 'popular':
+        popularList.forEach((element: any) => {
+          if (element.id === item.id) {
+            filteredList.push({...element, isFavourite: !element.isFavourite});
+          } else {
+            filteredList.push(element);
+          }
+        });
+        setPopularList(filteredList);
+        break;
+
+      case 'lastest':
+        latestList.forEach((element: any) => {
+          if (element.id === item.id) {
+            filteredList.push({...element, isFavourite: !element.isFavourite});
+          } else {
+            filteredList.push(element);
+          }
+        });
+        setLatestList(filteredList);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
-      <View style={{width:'100%',padding:20,height:'100%'}}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-        <CustomTab selectedTab={tab} onPress={(e:any) => setTab(e)} />
-        <TouchableOpacity onPress={()=>props.navigation.navigate('FavouritePage',{latestList})}>
-        <Text style={{color:Colors.black}}>Go to Favourites</Text>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <CustomTab selectedTab={tab} onPress={(e: any) => setTab(e)} />
+        <TouchableOpacity
+          onPress={() =>
+            props.navigation.navigate('FavouritePage', {
+              latestList: [...latestList, ...popularList],
+            })
+          }>
+          <Text style={{color: Colors.black}}>{Constants.goToFavourite}</Text>
         </TouchableOpacity>
         {!loading ? (
           <>
@@ -123,7 +146,7 @@ export default function Home(props:NavigationProps) {
                     <MovieLists
                       item={item}
                       favourite={true}
-                      onPressFavourite={() => handleFavourite(item)}
+                      onPressFavourite={() => handleFavourite(item, 'lastest')}
                       onPress={() =>
                         navigation.navigate('DetailPage', {
                           id: item.id,
@@ -164,6 +187,8 @@ export default function Home(props:NavigationProps) {
                   renderItem={({item, index}) => (
                     <MovieLists
                       item={item}
+                      favourite={true}
+                      onPressFavourite={() => handleFavourite(item, 'popular')}
                       onPress={() =>
                         navigation.navigate('DetailPage', {
                           id: item?.id,
@@ -186,6 +211,8 @@ export default function Home(props:NavigationProps) {
                   renderItem={({item, index}) => (
                     <MovieLists
                       item={item}
+                      favourite={true}
+                      onPressFavourite={() => handleFavourite(item, 'popular')}
                       onPress={() =>
                         navigation.navigate('DetailPage', {
                           id: item.id,
@@ -205,6 +232,6 @@ export default function Home(props:NavigationProps) {
           <ActivityIndicator color={Colors.darkBlue} size={'small'} />
         )}
       </ScrollView>
-      </View>
-  )
+    </View>
+  );
 }

@@ -1,62 +1,60 @@
 import MovieLists from '../../components/Lists/MovieLists';
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import {
   View,
   FlatList,
   Text,
-  ImageBackground,
-  ScrollView,
-  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import Colors from '../../common/colors/Colors';
-import ImagePath from '../../common/images/ImagePath';
-import styles from './styles';
+import styles from './Styles';
+import Constants from '../../common/contant/Constants';
 
 export interface NavigationProps {
-    navigation: any;
-    route?: any;
-  }
-  
-  export default function FavouriteScreen(props:NavigationProps) {
-    const {navigation} = props;
+  navigation: any;
+  route?: any;
+}
 
-    const [favouriteItems, setFavouriteItems] = useState<any>(props.route.params.latestList);
+export default function FavouriteScreen(props: NavigationProps) {
+  const {navigation} = props;
+
+  const [favouriteItems, setFavouriteItems] = useState<any>(
+    props.route.params.latestList,
+  );
   return (
     <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => navigation.goBack()}>
-          <Text>Back</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.backBtn}
+        onPress={() => navigation.goBack()}>
+        <Text>Back</Text>
+      </TouchableOpacity>
 
-        <Text style={{alignSelf:'center',fontSize:22,color:Colors.black}}>Favourite Screen</Text>
+      <Text style={styles.heading}>
+        {Constants.favouriteScreen}
+      </Text>
 
-        <FlatList
-                  data={favouriteItems}
-                  horizontal
-                  style={{padding:20}}
-                  renderItem={({ item, index }) => {
-                    if (item.isFavourite) {
-                        return (
-                            <MovieLists
-                            item={item}
-                            onPress={() =>
-                              navigation.navigate('DetailPage', {
-                                id: item.id,
-                              })
-                            }
-                            onPressDot={() => console.log('Dot clicked')}
-                          />
-                        )
-                    }
+      <FlatList
+        data={favouriteItems}
+        horizontal
+        style={styles.flatlist}
+        renderItem={({item, index}) => {
+          if (item.isFavourite) {
+            return (
+              <MovieLists
+                item={item}
+                onPress={() =>
+                  navigation.navigate('DetailPage', {
+                    id: item.id,
+                  })
                 }
-                }
-               
-                  scrollEnabled={true}
-                  keyExtractor={(item, index) => index.toString()}
-                  showsHorizontalScrollIndicator={false}
-                />
+                onPressDot={() => console.log('Dot clicked')}
+              />
+            );
+          }
+        }}
+        scrollEnabled={true}
+        keyExtractor={(item, index) => index.toString()}
+        showsHorizontalScrollIndicator={false}
+      />
     </View>
   );
 }
